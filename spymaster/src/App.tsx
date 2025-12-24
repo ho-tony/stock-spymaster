@@ -1,8 +1,7 @@
 import { useState } from "react";
 import StockGraph, {
-  type StockGraphProps,
-  type StockPoint,
 } from "./components/graph";
+import { type StockGraphProps } from "./components/types";
 function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<StockGraphProps>({ data: [], symbol: "" });
@@ -10,7 +9,6 @@ function App() {
 
   const fetchStockPrice = async (ticker: string) => {
     try {
-      console.log("fetching stock price for ", ticker);
       setIsLoading(true);
       const response = await fetch(
         `http://127.0.0.1:8000/v1/stock-history/${ticker}`
@@ -20,9 +18,6 @@ function App() {
       )
       const responseData = await response.json();
       const newsData = await news_response.json()
-      console.log("news data full object:", newsData);
-      console.log("news items array:", newsData.data);
-      console.log("news items count:", newsData.data?.length);
       
       setData({ data: responseData.data, symbol: ticker, news: newsData});
       setHasQueried(true);

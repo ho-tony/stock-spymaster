@@ -15,8 +15,16 @@ function App() {
       const response = await fetch(
         `http://127.0.0.1:8000/v1/stock-history/${ticker}`
       );
+      const news_response = await fetch(
+        `http://127.0.0.1:8000/v1/stock-news/${ticker}`
+      )
       const responseData = await response.json();
-      setData({ data: responseData.data, symbol: ticker });
+      const newsData = await news_response.json()
+      console.log("news data full object:", newsData);
+      console.log("news items array:", newsData.data);
+      console.log("news items count:", newsData.data?.length);
+      
+      setData({ data: responseData.data, symbol: ticker, news: newsData});
       setHasQueried(true);
 
       setIsLoading(false);
@@ -54,7 +62,12 @@ function App() {
       {isLoading ? (
         <div>is loading...</div>
       ) : hasQueried ? (
-        <StockGraph data={data.data} symbol={data.symbol} color={getColor()}></StockGraph>
+        <StockGraph 
+          data={data.data} 
+          symbol={data.symbol} 
+          news={data.news}
+          color={getColor()}
+        />
       ) : null}
     </div>
   );
